@@ -5,6 +5,7 @@ def typewriter(params):
     for letter in message:
         print(letter, end="",
               flush=True)  # flush helps us to print one letter by one letter and be displayed immediately
+        time.sleep(0.025)
     print()
     time.sleep(1)
 
