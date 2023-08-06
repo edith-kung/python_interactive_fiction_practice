@@ -4,7 +4,7 @@ def add_punishment(concern):
         print("You have received 3 concerns, you now have one warning on your record, you will now no longer receive "\
         "concerns and your next mistake will result in a warning.\nIf you receive two more warnings, you will receive "\
         "lunchtime detention.")
-    elif concern == 5:
+    elif concern >= 5:
         print("You have received lunchtime detention. At lunchtime, please head to the staffroom.")
     return concern
 
