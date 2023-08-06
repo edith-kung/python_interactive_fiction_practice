@@ -2,16 +2,17 @@ import time
 from punishments import *
 from inputs import *
 
-concern = 4
+global_variables = {
+    "concern": 4
+}
 
 def activity_if_ontime():
     print("You swiped in on time")
     time.sleep(1)
 
 def activity_iflate():
-    global concern
     print("one minute passes, you receive a concern on your record")
-    concern = add_punishment(concern)
+    global_variables["concern"] = add_punishment(global_variables["concern"])
     time.sleep(1)
 
 def opening_message(valid_activities, instructions):
@@ -19,7 +20,7 @@ def opening_message(valid_activities, instructions):
         "School begins at 8:10am, it is now 8:09am. What would you like to do?")  # activity = variable store user info
     while activity not in valid_activities:
         if activity in instructions:
-            instructions[activity]["function"](instructions[activity]["params"])
+            instructions[activity]["function"](dict([(i, global_variables[i]) for i in instructions[activity]["params"]]))
         else:
             print("this is invalid")
         activity = handle_input(
@@ -37,11 +38,10 @@ def main():
     instructions = {
         "check punishments": {
             "function": punishment_record,
-            "params": {
-                "concern": concern
-            }
+            "params": ["concern"]
         }
     }  # this dictionary contains all the instructions that do not advance plot or time
+
     opening_message(valid_activities, instructions)
 
 
