@@ -40,7 +40,7 @@ def get_params(func):
         params = params | get_global_params(func["global params"])
     return params
 
-def call_function(dictionary):
+def run_functions(dictionary):
     if "functions" in dictionary:
         for func in dictionary["functions"]:
             params = get_params(func)
@@ -54,9 +54,9 @@ def call_function(dictionary):
 def opening_message(valid_activities, prompt):
     activity = handle_input(prompt)  # activity = variable store user info
     if activity in valid_activities:
-        return call_function(valid_activities[activity])  # activity is the input, which needs to match the dict, and becomes the key to point
+        return run_functions(valid_activities[activity])  # activity is the input, which needs to match the dict, and becomes the key to point
     elif activity in instructions:
-        call_function(instructions[activity])
+        run_functions(instructions[activity])
     else:
         print("this is invalid")
     opening_message(valid_activities, prompt)
