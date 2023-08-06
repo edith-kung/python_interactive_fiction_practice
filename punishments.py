@@ -8,7 +8,8 @@ def add_punishment(concern):
         print("You have received lunchtime detention. At lunchtime, please head to the staffroom.")
     return concern
 
-def punishment_record():
+def punishment_record(params):
+    concern = params["concern"]
     if concern <= 2:
         print("You have", concern, "concern" + ("s" if concern != 1 else ""))
     elif concern <= 4:

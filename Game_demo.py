@@ -19,7 +19,7 @@ def opening_message(valid_activities, instructions):
         "School begins at 8:10am, it is now 8:09am. What would you like to do?")  # activity = variable store user info
     while activity not in valid_activities:
         if activity in instructions:
-            instructions[activity]()
+            instructions[activity]["function"](instructions[activity]["params"])
         else:
             print("this is invalid")
         activity = handle_input(
@@ -35,7 +35,12 @@ def main():
         "go inside": activity_if_ontime
     }
     instructions = {
-        "check punishments": punishment_record
+        "check punishments": {
+            "function": punishment_record,
+            "params": {
+                "concern": concern
+            }
+        }
     }  # this dictionary contains all the instructions that do not advance plot or time
     opening_message(valid_activities, instructions)
 
