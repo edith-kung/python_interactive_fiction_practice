@@ -8,13 +8,18 @@ def add_punishment(concern):
         print("You have received lunchtime detention. At lunchtime, please head to the staffroom.")
     return concern
 
+def plural(val):
+    return "s" if val != 1 else ""
+
 def punishment_record(params):
     concern = params["concern"]
-    if concern <= 2:
-        print("You have", concern, "concern" + ("s" if concern != 1 else ""))
+    if concern <= 0:
+        return # print unsuccessful message?
+    elif concern <= 2:
+        print("You have", concern, "concern" + plural(concern))
     elif concern <= 4:
         warning = concern - 2
-        print("You have", warning, "warning" + ("s" if warning != 1 else ""))
+        print("You have", warning, "warning" + plural(warning))
     else:
         detention = concern - 4
-        print("You have had", detention, "detention" + ("s" if detention != 1 else ""))
+        print("You have had", detention, "detention" + plural(detention))
