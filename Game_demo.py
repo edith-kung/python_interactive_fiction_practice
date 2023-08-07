@@ -48,76 +48,83 @@ def run_functions(dictionary):
                 func["function"](params)
                 continue
             func["function"]()
-    if "branch" in dictionary and "prompt" in dictionary:
-        return opening_message(dictionary["branch"], dictionary["prompt"])
+    if "branch" in dictionary:
+        return opening_message(dictionary["branch"])
 
-def opening_message(valid_activities, prompt):
-    activity = handle_input(prompt)  # activity = variable store user info
-    if activity in valid_activities:
-        return run_functions(valid_activities[activity])  # activity is the input, which needs to match the dict, and becomes the key to point
+def opening_message(event):
+    activity = handle_input(event["prompt"])  # activity = variable store user info
+    if activity in event["valid_activities"]:
+        return run_functions(event["valid_activities"][activity])  # activity is the input, which needs to match the dict, and becomes the key to point
     elif activity in instructions:
         run_functions(instructions[activity])
     else:
         print("this is invalid")
-    opening_message(valid_activities, prompt)
+    opening_message(event)
 
 def main():
     typewriter({ "message": "EXT. King George V School, established 1879. You are a new student, looking at the main entrance"})
     doing_nothing_activities = {
-        "do nothing": {
-            "functions": [
-                {
-                    "function": activity_if_late
-                }
-            ]
-        },
-        "run away": {
-            "functions": [
-                {
-                    "function": activity_if_late
-                }
-            ]
+        "prompt": "Don't just stand there, do something!",
+        "valid_activities": {
+            "do nothing": {
+                "functions": [
+                    {
+                        "function": activity_if_late
+                    }
+                ]
+            },
+            "run away": {
+                "functions": [
+                    {
+                        "function": activity_if_late
+                    }
+                ]
+            }
         }
     }
     go_inside_activities = {
-        "swipe in": {
-            "functions": [
-                {
-                    "function": activity_if_ontime
-                }
-            ]
-        },
-        "go to class": {
-            "functions": [
-                {
-                    "function": activity_if_late
-                }
-            ]
+        "prompt": "You are standing next to the gate. What would you like to do?",
+        "valid_activities": {
+            "swipe in": {
+                "functions": [
+                    {
+                        "function": activity_if_ontime
+                    }
+                ]
+            },
+            "go to class": {
+                "functions": [
+                    {
+                        "function": activity_if_late
+                    }
+                ]
+            }
         }
     }
-    valid_activities = {
-        "do nothing": {
-            "branch": doing_nothing_activities,
-            "prompt": "Don't just stand there, do something!",
-            "functions": [
-                {
-                    "function": typewriter,
-                    "dict params":
-                        {
-                            "message": "one minute passes, you receive a concern on your record"
-                        }
-                },
-                {
-                    "function": receive_concern
-                }
-            ]
-        }, 
-        "go inside": {
-            "branch": go_inside_activities,
-            "prompt": "You are standing next to the gate. What would you like to do?"
+    first_event = {
+        "prompt": "School begins at 8:10am, it is now 8:09am. What would you like to do?",
+        "valid_activities": {
+            "do nothing": {
+                "branch": doing_nothing_activities, # next branch
+                "functions": [ # to run when this option is chosen before going onto next branch
+                    {
+                        "function": typewriter,
+                        "dict params":
+                            {
+                                "message": "one minute passes, you receive a concern on your record"
+                            }
+                    },
+                    {
+                        "function": receive_concern
+                    }
+                ]
+            }, 
+            "go inside": {
+                "branch": go_inside_activities
+            }
         }
     }
-    opening_message(valid_activities, "School begins at 8:10am, it is now 8:09am. What would you like to do?")
+    opening_message(first_event)
 
 
 main()
